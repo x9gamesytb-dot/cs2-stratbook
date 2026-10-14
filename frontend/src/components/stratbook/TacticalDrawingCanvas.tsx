@@ -130,6 +130,8 @@ export const TacticalDrawingCanvas: React.FC<TacticalDrawingCanvasProps> = ({
         return '/maps/de_dust2_radar_psd.png';
       case 'vertigo':
         return '/maps/de_vertigo_radar_psd.png';
+      case 'cache':
+        return '/maps/de_cache_radar_psd.png';
       default:
         return '/maps/de_mirage_radar_psd.png';
     }

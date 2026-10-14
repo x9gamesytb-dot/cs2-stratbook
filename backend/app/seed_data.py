@@ -340,33 +340,44 @@ def seed_database(db: Session):
             ]
         ),
 
-        # Vertigo
+        # Cache
         Strat(
-            map_name="Vertigo",
-            title="A Ramp Push - Crane Smoke & Default Molotov",
+            map_name="Cache",
+            title="A Site Execute - Cross Smoke & Forklift Molotov",
             buy_phase="Full buy",
             side="T-Side",
             category="Execution",
-            description="Prise agressive de la Rampe A au 51e étage. Smoke Right Side / Crane, molotov Sandbags, et prise du site A avec plante couverte sous la grue.",
+            description="Exécution classique du Site A sur Cache. Smoke Cross / Truck pour isoler la ligne longue, Molotov Forklift et flash aveuglante au-dessus du toit de Squeaky.",
             assigned_roles={
-                "IGL": "Smoke Crane / Right Side depuis T Stairs.",
-                "Entry": "Premier contact Ramp avec trade frags immédiats.",
-                "Support": "Molotov Default et flash pop au-dessus de la barrière.",
-                "AWP / Sniper": "Contrôle les pushs CT Mid.",
-                "Lurker": "Pression B Stairs pour retarder la rotation CT."
+                "IGL": "Smoke Cross depuis A Long et call du timing d'entrée.",
+                "Entry": "Sortie A Main premier contact, clear Quad et Default.",
+                "Support": "Molotov Forklift depuis Sunroom/Main et flashes hautes.",
+                "AWP / Sniper": "Contrôle Highway et isolation des retakes depuis CT Spawn.",
+                "Lurker": "Pression B Halls ou Garage Mid pour empêcher la reprise."
             },
-            callouts=["A Ramp", "Crane", "Sandbags", "A Site", "51st Floor", "Elevator"],
+            callouts=["A Main", "Forklift", "Quad", "Squeaky", "Highway", "A Site", "Truck"],
             pins=[
                 {
-                    "id": "vertigo-pin-1",
-                    "x": 65.0,
-                    "y": 60.0,
+                    "id": "cache-pin-1",
+                    "x": 62.0,
+                    "y": 42.0,
                     "type": "smoke",
                     "side": "T-Side",
-                    "title": "Smoke Crane / Right Side",
-                    "description": "Isole les défenseurs CT positionnés sous la grue.",
+                    "title": "Smoke Cross / Truck",
+                    "description": "Coupe la vision du sniper CT depuis Highway et Truck.",
                     "throw_type": "Jumpthrow",
                     "player_role": "IGL"
+                },
+                {
+                    "id": "cache-pin-2",
+                    "x": 68.0,
+                    "y": 38.0,
+                    "type": "molotov",
+                    "side": "T-Side",
+                    "title": "Molotov Forklift",
+                    "description": "Déloge le défenseur CT caché derrière le chariot élévateur.",
+                    "throw_type": "Standing",
+                    "player_role": "Support"
                 }
             ]
         )

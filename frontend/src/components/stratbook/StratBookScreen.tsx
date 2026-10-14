@@ -30,7 +30,7 @@ export const StratBookScreen: React.FC = () => {
     'Anubis',
     'Ancient',
     'Dust II',
-    'Vertigo'
+    'Cache'
   ]);
   const [selectedMap, setSelectedMap] = useState<string>('Mirage');
   const [strats, setStrats] = useState<Strat[]>([]);

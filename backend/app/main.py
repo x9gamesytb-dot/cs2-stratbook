@@ -54,7 +54,7 @@ def health_check():
         "status": "healthy",
         "app": "CS2 Tactical Stratbook",
         "version": "1.0.0",
-        "maps_supported": ["Mirage", "Inferno", "Nuke", "Anubis", "Ancient", "Dust II", "Vertigo"]
+        "maps_supported": ["Mirage", "Inferno", "Nuke", "Anubis", "Ancient", "Dust II", "Cache"]
     }
 
 # Montage du frontend React (Production / Deploiement Cloud)
