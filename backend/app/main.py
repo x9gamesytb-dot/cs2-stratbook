@@ -58,7 +58,14 @@ def health_check():
     }
 
 # Montage du frontend React (Production / Deploiement Cloud)
-frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist"))
-if os.path.exists(frontend_dist):
-    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+possible_dist_paths = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "dist")),
+    os.path.abspath("frontend/dist"),
+]
+for p in possible_dist_paths:
+    if os.path.exists(p) and os.path.isdir(p):
+        app.mount("/", StaticFiles(directory=p, html=True), name="frontend")
+        break
 
