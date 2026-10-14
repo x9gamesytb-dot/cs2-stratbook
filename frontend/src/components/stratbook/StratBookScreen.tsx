@@ -19,7 +19,9 @@ import {
   Flame,
   Cloud,
   Zap,
-  RotateCcw
+  RotateCcw,
+  Download,
+  Upload
 } from 'lucide-react';
 
 export const StratBookScreen: React.FC = () => {
@@ -226,18 +228,81 @@ export const StratBookScreen: React.FC = () => {
     setEditingStrat({ ...editingStrat, pins: updated });
   };
 
+  const handleExportBackup = async () => {
+    try {
+      const allStrats = await api.exportBackup();
+      const blob = new Blob([JSON.stringify(allStrats, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cs2_stratbook_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Erreur lors de l'exportation de la sauvegarde.");
+    }
+  };
+
+  const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if (!Array.isArray(parsed)) {
+        alert("Fichier invalide : le format attendu est une liste de stratégies.");
+        return;
+      }
+      const res = await api.importBackup(parsed);
+      alert(`Succès ! ${res.imported} stratégies importées et restaurées avec succès !`);
+      await loadStrats();
+    } catch (err) {
+      alert("Erreur lors de l'importation du fichier JSON.");
+    } finally {
+      e.target.value = '';
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Map Selector Pills */}
+      {/* Map Selector Pills & Backup Actions */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 shadow-md backdrop-blur">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 tactical-font flex items-center space-x-1.5">
             <Layers className="w-3.5 h-3.5 text-amber-400" />
             <span>Map Pool Actif CS2</span>
           </span>
-          <span className="text-xs text-slate-500 font-mono">
-            {strats.length} stratégies sur {selectedMap}
-          </span>
+
+          <div className="flex items-center space-x-2">
+            <span className="text-xs text-slate-500 font-mono hidden sm:inline mr-2">
+              {strats.length} stratégies sur {selectedMap}
+            </span>
+
+            {/* Export Backup Button */}
+            <button
+              onClick={handleExportBackup}
+              title="Exporter toutes les stratégies en fichier JSON de sauvegarde"
+              className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-400" />
+              <span>Sauvegarder</span>
+            </button>
+
+            {/* Import Backup Button */}
+            <label
+              title="Restaurer des stratégies depuis un fichier JSON de sauvegarde"
+              className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs cursor-pointer transition"
+            >
+              <Upload className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Restaurer</span>
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleImportBackup}
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
         <div className="flex overflow-x-auto space-x-2 pb-1 scrollbar-thin">
           {maps.map((map) => {

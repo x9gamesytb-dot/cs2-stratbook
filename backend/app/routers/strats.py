@@ -42,6 +42,34 @@ def get_strats_map_summary(db: Session = Depends(get_db)):
     results = db.query(Strat.map_name, func.count(Strat.id)).group_by(Strat.map_name).all()
     return {row[0]: row[1] for row in results}
 
+@router.get("/backup/export", response_model=List[StratOut])
+def export_strats_backup(db: Session = Depends(get_db)):
+    """Exporte l'ensemble des stratégies et schémas pour sauvegarde."""
+    return db.query(Strat).all()
+
+@router.post("/backup/import")
+def import_strats_backup(payload: List[Dict[str, Any]], db: Session = Depends(get_db)):
+    """Restaure les stratégies à partir d'un fichier de sauvegarde JSON."""
+    count = 0
+    for s_dict in payload:
+        title = s_dict.get("title")
+        map_name = s_dict.get("map_name")
+        if not title or not map_name:
+            continue
+        existing = db.query(Strat).filter(Strat.map_name == map_name, Strat.title == title).first()
+        if existing:
+            for k, v in s_dict.items():
+                if k != "id" and hasattr(existing, k):
+                    setattr(existing, k, v)
+        else:
+            clean_data = {k: v for k, v in s_dict.items() if k != "id"}
+            new_strat = Strat(**clean_data)
+            db.add(new_strat)
+        count += 1
+    db.commit()
+    return {"status": "success", "imported": count}
+
+
 @router.get("/{strat_id}", response_model=StratOut)
 def get_strat(strat_id: int, db: Session = Depends(get_db)):
     strat = db.query(Strat).filter(Strat.id == strat_id).first()

@@ -69,4 +69,14 @@ export const api = {
 
   getMapStratsSummary: () =>
     request<Record<string, number>>('/strats/maps/summary'),
+
+  exportBackup: () =>
+    request<Strat[]>('/strats/backup/export'),
+
+  importBackup: (data: any[]) =>
+    request<{ status: string; imported: number }>('/strats/backup/import', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };
+
