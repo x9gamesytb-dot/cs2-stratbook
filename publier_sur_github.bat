@@ -3,6 +3,9 @@ chcp 65001 > nul
 title CS2 Tactical HQ - Envoi vers GitHub
 color 0A
 cls
+
+cd /d "C:\Users\x9gam\Desktop\CS2 Strat"
+
 echo ======================================================================
 echo           PUBLICATION DE TON STRATBOOK VERS GITHUB
 echo ======================================================================
