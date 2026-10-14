@@ -33,6 +33,16 @@ export const Navbar: React.FC<NavbarProps> = ({ totalStratsCount = 0 }) => {
 
           {/* Tactical Badges & Quick Stats */}
           <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-emerald-400 font-mono text-[11px] font-semibold hidden sm:inline">
+                Synchro Équipe Active
+              </span>
+            </div>
+
             <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
               <Layers className="w-4 h-4 text-amber-400" />
               <span className="text-slate-300 font-mono font-medium">7 Maps Compétitives</span>

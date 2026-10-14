@@ -71,7 +71,25 @@ export const StratBookScreen: React.FC = () => {
 
   useEffect(() => {
     loadStrats();
-  }, [selectedMap]);
+
+    // Synchronisation en temps réel de l'équipe (toutes les 4 secondes)
+    const syncInterval = setInterval(async () => {
+      if (isModalOpen) return; // Ne pas interrompre si l'utilisateur est en train d'écrire dans la modal
+      try {
+        const freshStrats = await api.getStrats({ map_name: selectedMap });
+        setStrats(freshStrats);
+        setSelectedStrat((prev) => {
+          if (!prev) return freshStrats.length > 0 ? freshStrats[0] : null;
+          const matched = freshStrats.find((s) => s.id === prev.id);
+          return matched || prev;
+        });
+      } catch (err) {
+        // En cas de micro-coupure réseau temporaire, continuer silencieusement
+      }
+    }, 4000);
+
+    return () => clearInterval(syncInterval);
+  }, [selectedMap, isModalOpen]);
 
   // Les repères du radar sont strictement et uniquement assignés à la stratégie sélectionnée
   const currentMapPins = selectedStrat ? (selectedStrat.pins || []) : [];
